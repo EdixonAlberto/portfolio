@@ -6,9 +6,12 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "format": "prettier --write *.{vue,ts,json,md}"
   },
   "devDependencies": {
-    "nuxt": "^3.3.2"
+    "nuxt": "^3.3.2",
+    "prettier": "^2.8.7",
+    "sass": "^1.60.0"
   }
 }
