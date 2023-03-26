@@ -1,6 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   srcDir: 'src/',
+  devServer: {
+    port: 8000
+  },
+  css: ['~/scss/main.scss'],
   vite: {
     css: {
       preprocessorOptions: {

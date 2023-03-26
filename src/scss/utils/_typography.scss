@@ -1,0 +1,29 @@
+$name-font: 'NotoSansMono';
+$path-font: '~/static/fonts';
+$font-primary: $name-font, Arial, Helvetica, sans-serif;
+
+@font-face {
+  src: url($path-font + '/#{$name-font}-Regular.ttf') format('truetype');
+  font-family: $name-font;
+  font-weight: 400;
+}
+
+@font-face {
+  src: url($path-font + '/#{$name-font}-Bold.ttf') format('truetype');
+  font-family: $name-font;
+  font-weight: 600;
+}
+
+body {
+  font-family: $font-primary;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+span,
+a {
+  font-family: $font-primary;
+}
