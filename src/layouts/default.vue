@@ -26,7 +26,7 @@ const route = useRoute()
 
     <footer>
       <div class="data">
-        <span>Creado por "Edixon Piña"</span>
+        <span>(Creado por Edixon Piña)</span>
         <a class="p-link" href="#" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         <a class="p-link" href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
@@ -41,17 +41,22 @@ const route = useRoute()
 </template>
 
 <style lang="scss" scoped>
+$padding-x: 360px;
+
 .app {
-  width: calc(100vw);
-  height: 100vh;
-  padding: 0 340px;
+  width: 100vw;
+  overflow-x: hidden;
 
   header {
     width: 100%;
-    height: 120px;
+    height: 80px;
+    padding: 0 $padding-x;
+    position: fixed;
+    top: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background: $color-grey-lite;
 
     .naming {
       display: flex;
@@ -66,6 +71,9 @@ const route = useRoute()
 
   nav {
     width: 100%;
+    height: 36px;
+    padding: 0 $padding-x;
+    padding-top: 100px;
 
     ul {
       display: flex;
@@ -98,11 +106,16 @@ const route = useRoute()
     }
   }
 
+  main {
+    padding: 0 $padding-x;
+    padding-top: 80px;
+  }
+
   footer {
-    width: calc(100% - 340px * 2);
+    width: 100%;
     height: 160px;
-    position: fixed;
-    bottom: 0;
+    margin-top: 80px;
+    padding: 0 $padding-x;
     display: flex;
     flex-direction: column;
     row-gap: 20px;

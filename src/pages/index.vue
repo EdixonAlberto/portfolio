@@ -1,34 +1,65 @@
+<script lang="ts" setup>
+type TProject = {
+  id: number
+  created_at: string
+  stargazers_count: number
+  name: string
+  description: string
+  html_url: string
+  homepage: string
+}
+
+const config = useRuntimeConfig()
+
+const { data, pending, error } = useFetch<{ items: TProject[] }>(
+  () => '/search/repositories?q=user:edixonalberto+topic:portfolio',
+  {
+    baseURL: config.public.apiBase
+  }
+)
+
+const projects = computed(() => data.value!.items)
+
+function getYearFromDate(date: string): string {
+  return new Date(date).getFullYear().toString()
+}
+</script>
+
 <template>
   <div class="projects">
     <h1>Proyectos</h1>
 
-    <div class="container">
-      <div class="project-card">
+    <div v-if="!pending && !error" class="container">
+      <div class="project-card" v-for="project of projects" :key="project.id">
         <div class="header">
-          <span>2022</span>
+          <span v-text="getYearFromDate(project.created_at)"></span>
 
           <div class="star">
-            <span>10</span>
+            <span v-text="project.stargazers_count"></span>
             <Icons name="star" />
           </div>
         </div>
 
-        <h4 class="title">Project Name</h4>
-        <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+        <h4 v-text="project.name"></h4>
+        <p v-text="project.description"></p>
 
         <div class="badges">
-          <a class="badge" href="#" target="_blank" rel="noopener noreferrer">
+          <a class="badge" :href="project.html_url" target="_blank" rel="noopener noreferrer">
             <Icons name="github" />
             <span>Código</span>
           </a>
 
-          <div class="badge">
+          <a v-if="project.homepage" class="badge" :href="project.homepage" target="_blank" rel="noopener noreferrer">
             <Icons name="browser" />
             <span>Demo</span>
-          </div>
+          </a>
         </div>
       </div>
     </div>
+
+    <div v-else-if="error">Error al obtener los datos, intente de nuevo mas tarde.</div>
+
+    <div v-else>Loading...</div>
   </div>
 </template>
 
@@ -42,9 +73,14 @@
 
   .container {
     width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
 
     .project-card {
-      width: 400px;
+      width: 385px;
       height: 210px;
       padding: 25px;
       display: flex;
@@ -69,8 +105,12 @@
           justify-content: flex-start;
           column-gap: 5px;
 
+          span {
+            font-size: 15px;
+          }
+
           .p-icon {
-            width: 24px;
+            width: 18px;
           }
         }
       }
@@ -81,6 +121,7 @@
       }
 
       p {
+        height: 333px;
         margin: 0;
         font-size: 0.875rem;
       }
@@ -99,7 +140,7 @@
           padding: 0 5px;
           display: flex;
           align-items: center;
-          justify-content: flex-start;
+          justify-content: center;
           column-gap: 5px;
           background: $color-white-dark;
           border: 1px solid $color-grey-lite;
