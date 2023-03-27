@@ -1,0 +1,9 @@
+.p-link {
+  color: #000;
+  text-decoration: none;
+
+  &:hover {
+    color: $color-secondary;
+    text-decoration: underline;
+  }
+}
