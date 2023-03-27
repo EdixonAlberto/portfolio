@@ -1,13 +1,33 @@
 <script lang="ts" setup>
+type TTheme = 'light' | 'dark' | 'system'
+const theme = ref<TTheme>('light')
 const route = useRoute()
+
+onMounted(() => {
+  const themeInitial = localStorage.getItem('theme') as TTheme
+  if (themeInitial) theme.value = themeInitial
+  else {
+    localStorage.setItem('theme', 'light')
+  }
+})
+
+watch(theme, value => {
+  localStorage.setItem('theme', value)
+})
 </script>
 
 <template>
-  <div class="app">
+  <div class="app" :class="theme">
     <header>
       <div class="naming">
         <Icons name="pinea" />
         <h2>Edixon Piña</h2>
+      </div>
+
+      <div class="theme">
+        <Icons v-if="theme === 'light'" name="sun" title="Tema Claro" @click="theme = 'dark'" />
+        <Icons v-else-if="theme === 'dark'" name="moon" title="Tema Oscuro" @click="theme = 'system'" />
+        <Icons v-else name="laptop" title="Tema Igual al Navegador" @click="theme = 'light'" />
       </div>
     </header>
 
@@ -21,7 +41,7 @@ const route = useRoute()
     </nav>
 
     <main>
-      <slot />
+      <slot :theme="theme" />
     </main>
 
     <footer>
@@ -43,9 +63,33 @@ const route = useRoute()
 <style lang="scss" scoped>
 $padding-x: 360px;
 
+@mixin theme-dark {
+  background: #181818;
+
+  header {
+    background: inherit;
+  }
+
+  h2,
+  span,
+  a {
+    color: #fff;
+  }
+}
+
 .app {
   width: 100vw;
   overflow-x: hidden;
+
+  &.dark {
+    @include theme-dark();
+  }
+
+  &.system {
+    @media (prefers-color-scheme: dark) {
+      @include theme-dark();
+    }
+  }
 
   header {
     width: 100%;
@@ -59,6 +103,7 @@ $padding-x: 360px;
     background: $color-grey-lite;
 
     .naming {
+      user-select: none;
       display: flex;
       align-items: center;
       justify-content: flex-start;
@@ -67,9 +112,19 @@ $padding-x: 360px;
         font-size: 1.5rem;
       }
     }
+
+    .theme {
+      user-select: none;
+      cursor: pointer;
+      padding: 5px;
+      background: #fff;
+      border: 1px solid $color-grey-lite;
+      border-radius: 6px;
+    }
   }
 
   nav {
+    user-select: none;
     width: 100%;
     height: 36px;
     padding: 0 $padding-x;

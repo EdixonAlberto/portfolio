@@ -9,6 +9,10 @@ type TProject = {
   homepage: string
 }
 
+definePageMeta({
+  layout: false
+})
+
 const config = useRuntimeConfig()
 
 const { data, pending, error } = useFetch<{ items: TProject[] }>(
@@ -26,49 +30,95 @@ function getYearFromDate(date: string): string {
 </script>
 
 <template>
-  <div class="projects">
-    <h1>Proyectos</h1>
+  <NuxtLayout name="default">
+    <template #default="{ theme }">
+      <div class="projects" :class="theme">
+        <h1>Proyectos</h1>
 
-    <div v-if="!pending && !error" class="container">
-      <div class="project-card" v-for="project of projects" :key="project.id">
-        <div class="header">
-          <span v-text="getYearFromDate(project.created_at)"></span>
+        <div v-if="!pending && !error" class="container">
+          <div class="project-card" v-for="project of projects" :key="project.id">
+            <div class="header">
+              <span v-text="getYearFromDate(project.created_at)"></span>
 
-          <div class="star">
-            <span v-text="project.stargazers_count"></span>
-            <Icons name="star" />
+              <div class="star">
+                <span v-text="project.stargazers_count"></span>
+                <Icons name="star" />
+              </div>
+            </div>
+
+            <h3 v-text="project.name"></h3>
+            <p v-text="project.description"></p>
+
+            <div class="badges">
+              <a class="badge" :href="project.html_url" target="_blank" rel="noopener noreferrer">
+                <Icons name="github" />
+                <span>Código</span>
+              </a>
+
+              <a
+                v-if="project.homepage"
+                class="badge"
+                :href="project.homepage"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icons name="browser" />
+                <span>Demo</span>
+              </a>
+            </div>
           </div>
         </div>
 
-        <h4 v-text="project.name"></h4>
-        <p v-text="project.description"></p>
+        <div v-else-if="error">Error al obtener los datos, intente de nuevo mas tarde.</div>
 
-        <div class="badges">
-          <a class="badge" :href="project.html_url" target="_blank" rel="noopener noreferrer">
-            <Icons name="github" />
-            <span>Código</span>
-          </a>
-
-          <a v-if="project.homepage" class="badge" :href="project.homepage" target="_blank" rel="noopener noreferrer">
-            <Icons name="browser" />
-            <span>Demo</span>
-          </a>
-        </div>
+        <div v-else>Loading...</div>
       </div>
-    </div>
-
-    <div v-else-if="error">Error al obtener los datos, intente de nuevo mas tarde.</div>
-
-    <div v-else>Loading...</div>
-  </div>
+    </template>
+  </NuxtLayout>
 </template>
 
 <style lang="scss" scoped>
+@mixin theme-dark {
+  h1,
+  h3,
+  p,
+  span {
+    color: #fff;
+  }
+
+  .container .project-card {
+    background: $color-grey-dark;
+    border-color: #2c2c2c;
+
+    .badges .badge {
+      background: $color-grey-dark;
+
+      .p-icon {
+        color: #fff;
+      }
+
+      &:hover {
+        border-color: $color-grey-lite;
+      }
+    }
+  }
+}
+
 .projects {
   width: 100%;
 
   h1 {
     font-size: 3rem;
+  }
+
+  &.dark {
+    @include theme-dark();
+  }
+
+  &.system {
+    @media (prefers-color-scheme: dark) {
+      @include theme-dark();
+    }
   }
 
   .container {
@@ -115,7 +165,7 @@ function getYearFromDate(date: string): string {
         }
       }
 
-      h4 {
+      h3 {
         margin: 0;
         font-size: 1rem;
       }
