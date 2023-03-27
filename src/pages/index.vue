@@ -9,20 +9,31 @@ type TProject = {
   homepage: string
 }
 
-definePageMeta({
-  layout: false
-})
+definePageMeta({ layout: false })
 
 const config = useRuntimeConfig()
 
-const { data, pending, error } = useFetch<{ items: TProject[] }>(
-  () => '/search/repositories?q=user:edixonalberto+topic:portfolio',
-  {
-    baseURL: config.public.apiBase
-  }
-)
+const {
+  data: dataUser,
+  pending: pendingUser,
+  error: errorUser
+} = useFetch<{ items: TProject[] }>(() => '/search/repositories?q=user:edixonalberto+topic:portfolio+fork:true', {
+  baseURL: config.public.apiBase
+})
 
-const projects = computed(() => data.value!.items)
+const {
+  data: dataOrg,
+  pending: pendingOrg,
+  error: errorOrg
+} = useFetch<{ items: TProject[] }>(() => '/search/repositories?q=user:pineacode+topic:portfolio', {
+  baseURL: config.public.apiBase
+})
+
+const projects = computed(() => {
+  return [...dataUser.value!.items, ...dataOrg.value!.items]
+})
+const pending = computed(() => pendingUser.value && pendingOrg.value)
+const error = computed(() => errorUser.value || errorOrg.value)
 
 function getYearFromDate(date: string): string {
   return new Date(date).getFullYear().toString()
@@ -126,7 +137,7 @@ function getYearFromDate(date: string): string {
     width: 100%;
     display: flex;
     align-items: flex-start;
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-wrap: wrap;
     gap: 20px;
 
