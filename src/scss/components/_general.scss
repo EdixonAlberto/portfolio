@@ -3,7 +3,10 @@
   text-decoration: none;
 
   &:hover {
-    color: $color-secondary;
-    text-decoration: underline;
+    &,
+    span {
+      color: $color-secondary !important;
+      text-decoration: underline;
+    }
   }
 }

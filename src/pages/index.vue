@@ -87,11 +87,12 @@ function getYearFromDate(date: string): string {
   }
 
   .container .project-card {
-    background: $color-grey-dark;
+    background: $color-blue-dark;
     border-color: #2c2c2c;
 
     .badges .badge {
-      background: $color-grey-dark;
+      background: $color-blue-dark;
+      border-color: #2c2c2c;
 
       .p-icon {
         color: #fff;

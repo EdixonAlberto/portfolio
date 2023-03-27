@@ -46,23 +46,34 @@ watch(theme, value => {
 
     <footer>
       <div class="data">
-        <span>(Creado por Edixon Piña)</span>
-        <a class="p-link" href="#" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a class="p-link" href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <p>(Creado por Edixon Piña)</p>
+        <a class="p-link" href="https://www.linkedin.com/in/edixonalberto/" target="_blank" rel="noopener noreferrer">
+          <span>LinkedIn</span>
+        </a>
+        <a class="p-link" href="https://github.com/EdixonAlberto/" target="_blank" rel="noopener noreferrer">
+          <span>GitHub</span>
+        </a>
       </div>
-      <div class="tools">
-        <a class="p-link" href="#" target="_blank" rel="noopener noreferrer">Nuxt3</a>
-        <a class="p-link" href="#" target="_blank" rel="noopener noreferrer">TypeScript</a>
-        <a class="p-link" href="#" target="_blank" rel="noopener noreferrer">GitHubAction</a>
-        <a class="p-link" href="#" target="_blank" rel="noopener noreferrer">GitHubPage</a>
+
+      <div class="data tools">
+        <a class="p-link" href="https://nuxt.com/" target="_blank" rel="noopener noreferrer">
+          <span>Nuxt3</span>
+          <Icons name="nuxt" />
+        </a>
+        <a class="p-link" href="https://www.typescriptlang.org/" target="_blank" rel="noopener noreferrer">
+          <span>TypeScript</span>
+          <Icons name="typescript" />
+        </a>
+        <a class="p-link" href="https://pages.github.com/" target="_blank" rel="noopener noreferrer">
+          <span>GitHubPage</span>
+          <Icons name="github" />
+        </a>
       </div>
     </footer>
   </div>
 </template>
 
 <style lang="scss" scoped>
-$padding-x: 360px;
-
 @mixin theme-dark {
   background: #181818;
 
@@ -71,6 +82,7 @@ $padding-x: 360px;
   }
 
   h2,
+  p,
   span,
   a {
     color: #fff;
@@ -78,6 +90,7 @@ $padding-x: 360px;
 }
 
 .app {
+  --padding-x: 360px;
   width: 100vw;
   overflow-x: hidden;
 
@@ -94,7 +107,7 @@ $padding-x: 360px;
   header {
     width: 100%;
     height: 80px;
-    padding: 0 $padding-x;
+    padding: 0 var(--padding-x);
     position: fixed;
     top: 0;
     display: flex;
@@ -127,7 +140,7 @@ $padding-x: 360px;
     user-select: none;
     width: 100%;
     height: 36px;
-    padding: 0 $padding-x;
+    padding: 0 var(--padding-x);
     padding-top: 100px;
 
     ul {
@@ -162,7 +175,7 @@ $padding-x: 360px;
   }
 
   main {
-    padding: 0 $padding-x;
+    padding: 0 var(--padding-x);
     padding-top: 80px;
   }
 
@@ -170,19 +183,69 @@ $padding-x: 360px;
     width: 100%;
     height: 160px;
     margin-top: 80px;
-    padding: 0 $padding-x;
+    padding: 0 var(--padding-x);
     display: flex;
     flex-direction: column;
     row-gap: 20px;
     align-items: center;
     justify-content: center;
 
-    .data,
-    .tools {
-      span,
+    .data {
+      p,
       a {
-        margin: 0 25px;
-        font-size: 1.25rem;
+        display: inline;
+        margin: auto 25px;
+        font-size: 1rem;
+      }
+
+      &.tools {
+        a {
+          width: max-content;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          column-gap: 5px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1440px) and (max-width: 1919px) {
+  .app {
+    --padding-x: 120px;
+  }
+}
+
+@media screen and (max-width: 1439px) {
+  .app {
+    --padding-x: 40px;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .app {
+    main {
+      padding-top: 40px;
+    }
+
+    footer {
+      padding: 0;
+
+      .data {
+        p,
+        a {
+          margin: auto 5px;
+          font-size: 0.9rem;
+        }
+
+        &.tools {
+          a {
+            .p-icon {
+              width: 18px;
+            }
+          }
+        }
       }
     }
   }
