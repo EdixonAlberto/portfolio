@@ -30,7 +30,11 @@ const {
 })
 
 const projects = computed(() => {
-  return [...dataUser.value!.items, ...dataOrg.value!.items]
+  const dataTotal = [...dataUser.value!.items, ...dataOrg.value!.items]
+  const result = dataTotal.sort((a, b) => {
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  })
+  return result
 })
 const pending = computed(() => pendingUser.value && pendingOrg.value)
 const error = computed(() => errorUser.value || errorOrg.value)
@@ -38,13 +42,19 @@ const error = computed(() => errorUser.value || errorOrg.value)
 function getYearFromDate(date: string): string {
   return new Date(date).getFullYear().toString()
 }
+
+function isUrlNPM(url: string): boolean {
+  return url.search(/^https:\/\/(www.)?npmjs.com/) > -1
+}
 </script>
 
 <template>
   <NuxtLayout name="default">
     <template #default="{ theme }">
       <div class="projects" :class="theme">
-        <h1>Proyectos</h1>
+        <h1>
+          Proyectos <span>({{ projects.length }})</span>
+        </h1>
 
         <div v-if="!pending && !error" class="container">
           <div class="project-card" v-for="project of projects" :key="project.id">
@@ -67,7 +77,18 @@ function getYearFromDate(date: string): string {
               </a>
 
               <a
-                v-if="project.homepage"
+                v-if="isUrlNPM(project.homepage)"
+                class="badge"
+                :href="project.homepage"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icons name="npm" />
+                <span>NPM</span>
+              </a>
+
+              <a
+                v-else-if="project.homepage"
                 class="badge"
                 :href="project.homepage"
                 target="_blank"
@@ -121,6 +142,10 @@ function getYearFromDate(date: string): string {
 
   h1 {
     font-size: 3rem;
+
+    span {
+      font-size: 1.5rem;
+    }
   }
 
   &.dark {

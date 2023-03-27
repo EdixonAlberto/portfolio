@@ -34,7 +34,7 @@ watch(theme, value => {
     <nav>
       <ul>
         <li :class="{ active: route.name === 'index' }">
-          <NuxtLink to="/">Projects</NuxtLink>
+          <NuxtLink to="/">Proyectos</NuxtLink>
           <div class="line"></div>
         </li>
       </ul>
@@ -46,7 +46,9 @@ watch(theme, value => {
 
     <footer>
       <div class="data">
-        <p>(Creado por Edixon Piña)</p>
+        <a class="p-link" href="https://github.com/EdixonAlberto/portfolio/" target="_blank" rel="noopener noreferrer">
+          <span>(Creado por Edixon Piña)</span>
+        </a>
         <a class="p-link" href="https://www.linkedin.com/in/edixonalberto/" target="_blank" rel="noopener noreferrer">
           <span>LinkedIn</span>
         </a>
@@ -64,9 +66,9 @@ watch(theme, value => {
           <span>TypeScript</span>
           <Icons name="typescript" />
         </a>
-        <a class="p-link" href="https://pages.github.com/" target="_blank" rel="noopener noreferrer">
-          <span>GitHubPage</span>
-          <Icons name="github" />
+        <a class="p-link" href="https://sass-lang.com/" target="_blank" rel="noopener noreferrer">
+          <span>Sass</span>
+          <Icons name="sass" />
         </a>
       </div>
     </footer>
@@ -82,7 +84,6 @@ watch(theme, value => {
   }
 
   h2,
-  p,
   span,
   a {
     color: #fff;
@@ -191,7 +192,6 @@ watch(theme, value => {
     justify-content: center;
 
     .data {
-      p,
       a {
         display: inline;
         margin: auto 25px;
@@ -233,7 +233,6 @@ watch(theme, value => {
       padding: 0;
 
       .data {
-        p,
         a {
           margin: auto 5px;
           font-size: 0.9rem;
