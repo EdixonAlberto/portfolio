@@ -13,30 +13,44 @@ definePageMeta({ layout: false })
 
 const config = useRuntimeConfig()
 
+clearNuxtData()
+
 const {
   data: dataUser,
   pending: pendingUser,
   error: errorUser
-} = useFetch<{ items: TProject[] }>(() => '/search/repositories?q=user:edixonalberto+topic:portfolio+fork:true', {
-  baseURL: config.public.apiBase
-})
+} = useLazyFetch<{ items: TProject[]; da: string }>(
+  '/search/repositories?q=user:edixonalberto+topic:portfolio+fork:true',
+  {
+    baseURL: config.public.apiBase,
+    pick: ['items']
+  }
+)
 
 const {
   data: dataOrg,
   pending: pendingOrg,
   error: errorOrg
-} = useFetch<{ items: TProject[] }>(() => '/search/repositories?q=user:pineacode+topic:portfolio', {
-  baseURL: config.public.apiBase
+} = useLazyFetch<{ items: TProject[] }>('/search/repositories?q=user:pineacode+topic:portfolio', {
+  baseURL: config.public.apiBase,
+  pick: ['items']
 })
 
 const projects = computed(() => {
-  const dataTotal = [...dataUser.value!.items, ...dataOrg.value!.items]
-  const result = dataTotal.sort((a, b) => {
-    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  })
-  return result
+  const itemsUser = dataUser.value?.items || []
+  const itemsOrg = dataOrg.value?.items || []
+
+  if (itemsUser.length && itemsOrg.length) {
+    const dataTotal = [...itemsUser, ...itemsOrg]
+    const result = dataTotal.sort((a, b) => {
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    })
+    return result
+  }
+
+  return []
 })
-const pending = computed(() => pendingUser.value && pendingOrg.value)
+const pending = computed(() => pendingUser.value || pendingOrg.value)
 const error = computed(() => errorUser.value || errorOrg.value)
 
 function getYearFromDate(date: string): string {
@@ -56,7 +70,7 @@ function isUrlNPM(url: string): boolean {
           Proyectos <span>({{ projects.length }})</span>
         </h1>
 
-        <div v-if="!pending && !error" class="container">
+        <div v-if="projects.length" class="container">
           <div class="project-card" v-for="project of projects" :key="project.id">
             <div class="header">
               <span v-text="getYearFromDate(project.created_at)"></span>
@@ -101,9 +115,11 @@ function isUrlNPM(url: string): boolean {
           </div>
         </div>
 
+        <div v-else-if="pending">Loading...</div>
+
         <div v-else-if="error">Error al obtener los datos, intente de nuevo mas tarde.</div>
 
-        <div v-else>Loading...</div>
+        <div v-else>No hay proyectos.</div>
       </div>
     </template>
   </NuxtLayout>
