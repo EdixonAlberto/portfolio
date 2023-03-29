@@ -1,13 +1,16 @@
 {
-  "name": "nuxt-app",
+  "name": "portfolio",
+  "description": "Portafolio de proyectos personales",
   "private": true,
+  "version": "1.0.0",
+  "license": "UNLICENSED",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "format": "prettier --write *.{vue,ts,json,md}"
+    "format": "prettier --write src/*.{vue,ts,json,md}"
   },
   "devDependencies": {
     "nuxt": "^3.3.2",

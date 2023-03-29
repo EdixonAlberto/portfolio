@@ -1,6 +1,7 @@
 {
-  "name": "Portafolio de proyectos personales",
+  "name": "Portafolio",
   "short_name": "Portafolio",
+  "description": "Portafolio de proyectos personales",
   "icons": [
     {
       "src": "/portfolio/static/icons/android-chrome-192x192.png",
