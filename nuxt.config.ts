@@ -16,9 +16,12 @@ export default defineNuxtConfig({
           content: 'width=device-width, initial-scale=1'
         },
         {
-          hid: 'description',
           name: 'description',
           content: 'Portafolio de proyectos personales.'
+        },
+        {
+          name: 'google-site-verification',
+          content: 'QDso9u7EscVpGI91C9ZfWfK0GFPupviImyV_ebHEaT0'
         }
       ],
       link: [
