@@ -1,57 +1,6 @@
 <script lang="ts" setup>
-type TProject = {
-  id: number
-  created_at: string
-  stargazers_count: number
-  name: string
-  description: string
-  html_url: string
-  homepage: string
-}
-
 definePageMeta({ layout: false })
-
-const config = useRuntimeConfig()
-
-clearNuxtData()
-
-const {
-  data: dataUser,
-  pending: pendingUser,
-  error: errorUser
-} = useLazyFetch<{ items: TProject[]; da: string }>(
-  '/search/repositories?q=user:edixonalberto+topic:portfolio+fork:true',
-  {
-    baseURL: config.public.apiBase,
-    pick: ['items']
-  }
-)
-
-const {
-  data: dataOrg,
-  pending: pendingOrg,
-  error: errorOrg
-} = useLazyFetch<{ items: TProject[] }>('/search/repositories?q=user:pineacode+topic:portfolio', {
-  baseURL: config.public.apiBase,
-  pick: ['items']
-})
-
-const projects = computed(() => {
-  const itemsUser = dataUser.value?.items || []
-  const itemsOrg = dataOrg.value?.items || []
-
-  if (itemsUser.length && itemsOrg.length) {
-    const dataTotal = [...itemsUser, ...itemsOrg]
-    const result = dataTotal.sort((a, b) => {
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    })
-    return result
-  }
-
-  return []
-})
-const pending = computed(() => pendingUser.value || pendingOrg.value)
-const error = computed(() => errorUser.value || errorOrg.value)
+const { data: projects, pending, error } = useProjects()
 
 function getYearFromDate(date: string): string {
   return new Date(date).getFullYear().toString()
@@ -70,8 +19,17 @@ function isUrlNPM(url: string): boolean {
           Proyectos <span>({{ projects.length }})</span>
         </h1>
 
-        <div v-if="projects.length" class="container">
+        <div v-if="projects.length" class="container" @click="">
           <div class="project-card" v-for="project of projects" :key="project.id">
+            <!-- TODO: create preview page -->
+            <!-- <div
+              v-if="project.topics.includes('preview')"
+              class="preview"
+              :style="{
+                backgroundImage: `url(https://raw.githubusercontent.com/EdixonAlberto/${project.name}/main/preview.png)`
+              }"
+            ></div> -->
+
             <div class="header">
               <span v-text="getYearFromDate(project.created_at)"></span>
 
@@ -115,11 +73,13 @@ function isUrlNPM(url: string): boolean {
           </div>
         </div>
 
-        <div v-else-if="pending">Loading...</div>
+        <div v-else-if="pending"><p>Loading...</p></div>
 
-        <div v-else-if="error">Error al obtener los datos, intente de nuevo mas tarde.</div>
+        <div v-else-if="error">
+          <p>Error al obtener los datos, intente de nuevo mas tarde.</p>
+        </div>
 
-        <div v-else>No hay proyectos.</div>
+        <div v-else><p>No hay proyectos.</p></div>
       </div>
     </template>
   </NuxtLayout>
@@ -131,6 +91,10 @@ function isUrlNPM(url: string): boolean {
   h3,
   p,
   span {
+    color: #fff;
+  }
+
+  .projects p {
     color: #fff;
   }
 
@@ -186,6 +150,7 @@ function isUrlNPM(url: string): boolean {
       width: 385px;
       height: 210px;
       padding: 25px;
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -194,6 +159,37 @@ function isUrlNPM(url: string): boolean {
       background: #fff;
       border: 1px solid $color-grey-lite;
       border-radius: 6px;
+      // z-index: 2;
+
+      // TODO: create preview page
+      // .preview {
+      //   width: 100%;
+      //   height: 100%;
+      //   visibility: hidden;
+      //   position: absolute;
+      //   top: 0;
+      //   left: 0;
+      //   background-size: cover;
+      //   background-position: left top;
+      //   background-repeat: no-repeat;
+      //   transition: all 0s 0.7s ease;
+      //   transform: rotateY(180deg);
+      // }
+
+      // &:hover {
+      //   transition: all 0.2s 0.5s ease-in;
+      //   transform: rotateY(180deg);
+
+      //   .preview {
+      //     visibility: visible;
+      //     // transform: translateY(-10px);
+      //     // z-index: -1;
+
+      //     &:hover {
+      //       // transform: translateY(-210px) scale(1.5);
+      //     }
+      //   }
+      // }
 
       .header {
         user-select: none;

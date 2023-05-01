@@ -1,3 +1,25 @@
+type TProject = {
+  id: number
+  created_at: string
+  stargazers_count: number
+  name: string
+  description: string
+  html_url: string
+  homepage: string
+  topics: string[]
+}
+
+type TErrorApiGithub = {
+  documentation_url: string
+  errors: Array<{
+    code: string
+    field: string
+    message: string
+    resource: string
+  }>
+  message: string
+}
+
 type TResponseApiGithub = {
   id: 365625035
   node_id: 'MDEwOlJlcG9zaXRvcnkzNjU2MjUwMzU='

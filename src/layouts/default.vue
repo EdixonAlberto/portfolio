@@ -93,6 +93,7 @@ watch(theme, value => {
 .app {
   --padding-x: 360px;
   width: 100vw;
+  height: 100vh;
   overflow-x: hidden;
 
   &.dark {
