@@ -91,7 +91,7 @@ watch(theme, value => {
 }
 
 .app {
-  --padding-x: 360px;
+  --padding-x: 350px;
   width: 100vw;
   height: 100vh;
   overflow-x: hidden;
@@ -214,13 +214,13 @@ watch(theme, value => {
 
 @media screen and (min-width: 1440px) and (max-width: 1919px) {
   .app {
-    --padding-x: 120px;
+    --padding-x: 110px;
   }
 }
 
 @media screen and (max-width: 1439px) {
   .app {
-    --padding-x: 40px;
+    --padding-x: 30px;
   }
 }
 
