@@ -2,6 +2,20 @@
 definePageMeta({ layout: false })
 const { data: projects, pending, error } = useProjects()
 
+// METHODS _____________________________________________________________________________________________________________
+
+function previewClose(projectId: number): void {
+  const projectCard = document.getElementById(projectId.toString())!
+  const preview = projectCard.childNodes.item(0) as Element
+  preview.classList.remove('active')
+}
+
+function previewActive(projectId: number): void {
+  const projectCard = document.getElementById(projectId.toString())!
+  const preview = projectCard.childNodes.item(0) as Element
+  preview.classList.toggle('active')
+}
+
 function getYearFromDate(date: string): string {
   return new Date(date).getFullYear().toString()
 }
@@ -19,56 +33,64 @@ function isUrlNPM(url: string): boolean {
           Proyectos <span>({{ projects.length }})</span>
         </h1>
 
-        <div v-if="projects.length" class="container" @click="">
-          <div class="project-card" v-for="project of projects" :key="project.id">
-            <!-- TODO: create preview page -->
-            <!-- <div
+        <div v-if="projects.length" class="container">
+          <div
+            :id="project.id.toString()"
+            class="project-card"
+            v-for="project of projects"
+            :key="project.id"
+            @mouseleave="previewClose(project.id)"
+          >
+            <div
               v-if="project.topics.includes('preview')"
               class="preview"
               :style="{
                 backgroundImage: `url(https://raw.githubusercontent.com/EdixonAlberto/${project.name}/main/preview.png)`
               }"
-            ></div> -->
+              @click="previewActive(project.id)"
+            ></div>
 
-            <div class="header">
-              <span v-text="getYearFromDate(project.created_at)"></span>
+            <div class="data">
+              <div class="header">
+                <span v-text="getYearFromDate(project.created_at)"></span>
 
-              <div class="star">
-                <span v-text="project.stargazers_count"></span>
-                <Icons name="star" />
+                <div class="star">
+                  <span v-text="project.stargazers_count"></span>
+                  <Icons name="star" />
+                </div>
               </div>
-            </div>
 
-            <h3 v-text="project.name"></h3>
-            <p v-text="project.description"></p>
+              <h3 v-text="project.name"></h3>
+              <p v-text="project.description"></p>
 
-            <div class="badges">
-              <a class="badge" :href="project.html_url" target="_blank" rel="noopener noreferrer">
-                <Icons name="github" />
-                <span>Código</span>
-              </a>
+              <div class="badges">
+                <a class="badge" :href="project.html_url" target="_blank" rel="noopener noreferrer">
+                  <Icons name="github" />
+                  <span>Código</span>
+                </a>
 
-              <a
-                v-if="isUrlNPM(project.homepage)"
-                class="badge"
-                :href="project.homepage"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Icons name="npm" />
-                <span>NPM</span>
-              </a>
+                <a
+                  v-if="isUrlNPM(project.homepage)"
+                  class="badge"
+                  :href="project.homepage"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icons name="npm" />
+                  <span>NPM</span>
+                </a>
 
-              <a
-                v-else-if="project.homepage"
-                class="badge"
-                :href="project.homepage"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Icons name="browser" />
-                <span>Demo</span>
-              </a>
+                <a
+                  v-else-if="project.homepage"
+                  class="badge"
+                  :href="project.homepage"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icons name="browser" />
+                  <span>Demo</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -98,7 +120,7 @@ function isUrlNPM(url: string): boolean {
     color: #fff;
   }
 
-  .container .project-card {
+  .container .project-card .data {
     background: $color-blue-dark;
     border-color: #2c2c2c;
 
@@ -149,108 +171,126 @@ function isUrlNPM(url: string): boolean {
     .project-card {
       width: 385px;
       height: 210px;
-      padding: 25px;
+
       position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-      row-gap: 14px;
-      background: #fff;
-      border: 1px solid $color-grey-lite;
       border-radius: 6px;
-      // z-index: 2;
 
-      // TODO: create preview page
-      // .preview {
-      //   width: 100%;
-      //   height: 100%;
-      //   visibility: hidden;
-      //   position: absolute;
-      //   top: 0;
-      //   left: 0;
-      //   background-size: cover;
-      //   background-position: left top;
-      //   background-repeat: no-repeat;
-      //   transition: all 0s 0.7s ease;
-      //   transform: rotateY(180deg);
-      // }
+      .preview {
+        cursor: pointer;
+        width: calc(100% - 2px);
+        height: calc(100% - 2px);
+        margin: auto;
 
-      // &:hover {
-      //   transition: all 0.2s 0.5s ease-in;
-      //   transform: rotateY(180deg);
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
 
-      //   .preview {
-      //     visibility: visible;
-      //     // transform: translateY(-10px);
-      //     // z-index: -1;
+        background-size: cover;
+        background-position: left top;
+        background-repeat: no-repeat;
+        border-radius: inherit;
+        z-index: 1;
 
-      //     &:hover {
-      //       // transform: translateY(-210px) scale(1.5);
-      //     }
-      //   }
-      // }
+        & + .data {
+          border-top-left-radius: 40px;
 
-      .header {
-        user-select: none;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        .star {
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-          column-gap: 5px;
-
-          span {
-            font-size: 15px;
+          @media screen and (max-width: 720px) {
+            border-top-left-radius: 80px;
           }
+        }
 
-          .p-icon {
-            width: 18px;
+        &:hover {
+          & + .data {
+            border-top-left-radius: 80px;
           }
+        }
+
+        &.active {
+          z-index: 3;
         }
       }
 
-      h3 {
-        margin: 0;
-        font-size: 1rem;
-      }
-
-      p {
-        height: 333px;
-        margin: 0;
-        font-size: 0.875rem;
-      }
-
-      .badges {
+      .data {
+        transition: all 0.25s 0s ease;
         width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        column-gap: 20px;
+        height: 100%;
+        padding: 25px;
 
-        .badge {
-          cursor: pointer;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        row-gap: 14px;
+
+        background: #fff;
+        border: 1px solid $color-grey-lite;
+        border-radius: inherit;
+        z-index: 2;
+
+        .header {
           user-select: none;
-          width: 100px;
-          padding: 0 5px;
+          width: 100%;
           display: flex;
           align-items: center;
-          justify-content: center;
-          column-gap: 5px;
-          background: $color-white-dark;
-          border: 1px solid $color-grey-lite;
-          border-radius: 6px;
+          justify-content: space-between;
 
-          .p-icon {
-            width: 24px;
+          .star {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            column-gap: 5px;
+
+            span {
+              font-size: 15px;
+            }
+
+            .p-icon {
+              width: 18px;
+            }
           }
+        }
 
-          &:hover {
-            border-color: $color-grey-dark;
+        h3 {
+          margin: 0;
+          font-size: 1rem;
+        }
+
+        p {
+          height: 333px;
+          margin: 0;
+          font-size: 0.875rem;
+        }
+
+        .badges {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          column-gap: 20px;
+
+          .badge {
+            cursor: pointer;
+            user-select: none;
+            width: 100px;
+            padding: 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            column-gap: 5px;
+            background: $color-white-dark;
+            border: 1px solid $color-grey-lite;
+            border-radius: 6px;
+
+            .p-icon {
+              width: 24px;
+            }
+
+            &:hover {
+              border-color: $color-grey-dark;
+            }
           }
         }
       }

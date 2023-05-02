@@ -116,6 +116,7 @@ watch(theme, value => {
     align-items: center;
     justify-content: space-between;
     background: $color-grey-lite;
+    z-index: 1000;
 
     .naming {
       user-select: none;
