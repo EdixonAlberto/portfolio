@@ -7,7 +7,9 @@ const { data: projects, pending, error } = useProjects()
 function previewClose(projectId: number): void {
   const projectCard = document.getElementById(projectId.toString())!
   const preview = projectCard.childNodes.item(0) as Element
-  preview.classList.remove('active')
+  if (preview.nodeName !== '#comment') {
+    preview.classList.remove('active')
+  }
 }
 
 function previewActive(projectId: number): void {
