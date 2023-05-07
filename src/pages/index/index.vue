@@ -6,16 +6,26 @@ const { data: projects, pending, error } = useProjects()
 
 function previewClose(projectId: number): void {
   const projectCard = document.getElementById(projectId.toString())!
-  const preview = projectCard.childNodes.item(0) as Element
-  if (preview.nodeName !== '#comment') {
+  const preview = projectCard.childNodes.item(0) as HTMLDivElement
+  if (preview.className.split(' ').includes('zoom')) {
+    preview.style.visibility = 'hidden'
+    preview.classList.remove('active', 'zoom')
+    setTimeout(() => (preview.style.visibility = 'visible'), 250)
+  } else {
     preview.classList.remove('active')
   }
 }
 
 function previewActive(projectId: number): void {
   const projectCard = document.getElementById(projectId.toString())!
-  const preview = projectCard.childNodes.item(0) as Element
-  preview.classList.toggle('active')
+  const preview = projectCard.childNodes.item(0) as HTMLDivElement
+  if (preview.nodeName !== '#comment') {
+    if (preview.className.split(' ').includes('active')) {
+      preview.classList.add('zoom')
+    } else {
+      preview.classList.add('active')
+    }
+  }
 }
 
 function getYearFromDate(date: string): string {
@@ -36,19 +46,14 @@ function isUrlNPM(url: string): boolean {
         </h1>
 
         <div v-if="projects.length" class="container">
-          <div
-            :id="project.id.toString()"
-            class="project-card"
-            v-for="project of projects"
-            :key="project.id"
-            @mouseleave="previewClose(project.id)"
-          >
+          <div :id="project.id.toString()" class="project-card" v-for="project of projects" :key="project.id">
             <div
               v-if="project.topics.includes('preview')"
               class="preview"
               :style="{
                 backgroundImage: `url(https://raw.githubusercontent.com/EdixonAlberto/${project.name}/main/preview.png)`
               }"
+              @mouseleave="previewClose(project.id)"
               @click="previewActive(project.id)"
             ></div>
 
