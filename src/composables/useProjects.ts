@@ -3,14 +3,13 @@ export default function useProjects() {
   const data = useState<TProject[]>('projects', () => [])
   const pending = useState<boolean>('pending', () => true)
   const error = useState<string>('error', () => '')
-  const MODE_DEV = false
 
   new Promise(async resolve => {
     try {
       let dataUser: TProject[] = [],
         dataOrg: TProject[] = []
 
-      if (MODE_DEV) {
+      if (config.public.modeDev) {
         const { items } = await $fetch<{ items: TProject[] }>('/static/projects.json')
         dataUser = items
         dataOrg = []

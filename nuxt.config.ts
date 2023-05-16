@@ -58,7 +58,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     apiSecret: '',
     public: {
-      apiBase: 'https://api.github.com'
+      apiBase: 'https://api.github.com',
+      modeDev: ''
     }
   },
   srcDir: 'src/',
