@@ -1,8 +1,8 @@
 # Portfolio
 
-Portafolio de proyectos personales.
+![banner](./banner.png)
 
-![preview](./preview.png)
+Portafolio de proyectos personales.
 
 ### Comandos
 ```sh
@@ -22,8 +22,12 @@ pnpm preview
 pnpm format
 ```
 
-### Stack Utilizado
+### Tecnologías Utilizadas
 
 - Nuxt 3
 - TypeScript
 - Sass
+
+### Previzualización
+
+![preview](./preview.png)

@@ -1,6 +1,32 @@
 <script lang="ts" setup>
 definePageMeta({ layout: false })
 const { data: projects, pending, error } = useProjects()
+const TECH_NAME_LIST = [
+  'GraphQL',
+  'Docker',
+  'Flask',
+  'Python',
+  'TypeScript',
+  'JavaScript',
+  'Deno',
+  'Node',
+  'Nest',
+  // ___________
+  'PostCSS',
+  'Stylus',
+  'Sass',
+  'CSS',
+  'TailwindCSS',
+  'Laravel',
+  'PHP',
+  'HTML',
+  'Angular',
+  'React',
+  'Next',
+  'Vue',
+  'Gridsome',
+  'Nuxt'
+]
 
 // METHODS _____________________________________________________________________________________________________________
 
@@ -34,6 +60,10 @@ function getYearFromDate(date: string): string {
 
 function isUrlNPM(url: string): boolean {
   return url.search(/^https:\/\/(www.)?npmjs.com/) > -1
+}
+
+function getNamesTechFromTopics(topics: string[]): string[] {
+  return TECH_NAME_LIST.filter(name => topics.includes(name.toLowerCase()))
 }
 </script>
 
@@ -97,6 +127,16 @@ function isUrlNPM(url: string): boolean {
                   <Icons name="browser" />
                   <span>Demo</span>
                 </a>
+              </div>
+
+              <div class="techs">
+                <Icons
+                  v-for="name of getNamesTechFromTopics(project.topics)"
+                  :key="name"
+                  class="tech"
+                  :title="name"
+                  :name="(name.toLowerCase() as any)"
+                />
               </div>
             </div>
           </div>

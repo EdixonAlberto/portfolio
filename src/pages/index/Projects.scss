@@ -26,6 +26,12 @@
         border-color: $color-grey-lite;
       }
     }
+
+    .techs .tech {
+      color: #fff;
+      background: $color-grey-dark;
+      border-color: $color-grey-lite;
+    }
   }
 }
 
@@ -190,6 +196,35 @@
 
             &:hover {
               border-color: $color-grey-dark;
+            }
+          }
+        }
+
+        .techs {
+          width: max-content;
+          display: flex;
+          justify-content: flex-end;
+          position: absolute;
+          right: 20px;
+          bottom: 4px;
+
+          .tech {
+            padding: 4px;
+            margin-right: -16px;
+
+            background: #fff;
+            border-radius: 50%;
+            border: 1px solid $color-grey-lite;
+            transition: all 0.25s 0s ease-in;
+          }
+
+          &:hover {
+            .tech {
+              transform: scale(1.2);
+
+              &:not(:last-child) {
+                margin-right: 10px;
+              }
             }
           }
         }
