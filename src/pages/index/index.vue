@@ -4,6 +4,7 @@ const { data: projects, pending, error } = useProjects()
 const TECH_NAME_LIST = [
   'GraphQL',
   'Docker',
+  'FastAPI',
   'Flask',
   'Python',
   'TypeScript',

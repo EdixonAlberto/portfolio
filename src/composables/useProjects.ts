@@ -8,19 +8,29 @@ export default function useProjects() {
     try {
       let dataUser: TProject[] = [],
         dataOrg: TProject[] = []
+      const { modeDev, apiBase } = config.public
 
-      if (config.public.modeDev) {
+      if (modeDev) {
         const { items } = await $fetch<{ items: TProject[] }>('/static/projects.json')
         dataUser = items
         dataOrg = []
       } else {
-        const { items: data1 } = await $fetch<{ items: TProject[] }>(
-          config.public.apiBase + '/search/repositories?q=user:edixonalberto+topic:portfolio+fork:true'
-        )
+        // TODO: create pagination in template to use better api of github
+        const perPage = 30
+        const page_list = [1, 2]
+        const data1_list: TProject[] = []
+
+        for (const page of page_list) {
+          const { items: data1 } = await $fetch<{ items: TProject[] }>(
+            `${apiBase}/search/repositories?q=user:edixonalberto+topic:portfolio+fork:true&per_page=${perPage}&page=${page}`
+          )
+          data1_list.push(...data1)
+        }
+
         const { items: data2 } = await $fetch<{ items: TProject[] }>(
-          config.public.apiBase + '/search/repositories?q=user:pineacode+topic:portfolio'
+          `${apiBase}/search/repositories?q=user:pineacode+topic:portfolio`
         )
-        dataUser = data1
+        dataUser = data1_list
         dataOrg = data2
       }
 
