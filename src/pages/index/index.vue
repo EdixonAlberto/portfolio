@@ -73,7 +73,7 @@ function getNamesTechFromTopics(topics: string[]): string[] {
     <template #default="{ theme }">
       <div class="projects" :class="theme">
         <h1>
-          Proyectos <span>({{ projects.length }})</span>
+          Desarrollo de Proyectos web y Móviles <span>({{ projects.length }})</span>
         </h1>
 
         <div v-if="projects.length" class="container">
